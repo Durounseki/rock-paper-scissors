@@ -11,20 +11,20 @@ function getRandInt(end,start=0){
 }
 
 //Prompt the user to chose a move
-function getPlayerMove(){
+function getPlayerMove(round){
     //Capitalize the string to make comparison easier 
-    let move=prompt("ROCK, PAPER, SCISSORS...").toUpperCase();
+    let move=prompt(`Round ${round}: ROCK, PAPER, SCISSORS...`).toUpperCase();
     //If the input is not in the allowed moves tell the user to chose again
     while(!moves.includes(move)){
         alert("Try again!")
-        move=prompt("ROCK, PAPER, SCISSORS...").toUpperCase();
+        move=prompt(`Round ${round}: ROCK, PAPER, SCISSORS...`).toUpperCase();
     }
     return move;
 }
 
 //Play one round
-function playRound(){
-    let playerMove=getPlayerMove();
+function playRound(round){
+    let playerMove=getPlayerMove(round);
     let computerMove=getComputerMove();
     if(playerMove==="ROCK"){
         if(computerMove==="PAPER"){
@@ -63,9 +63,9 @@ function playGame(rounds=5){
     )
     let i=0;
     let score=0;
-    //If one of the players win 3 games stop the game and show the result 
-    while(Math.abs(score) < rounds-i){
-        result = playRound();
+    //If one of the players win floor(n/2)+1 games stop the game and show the result 
+    while(Math.abs(score) <= rounds-i && rounds-i > 0){
+        result = playRound(i+1);
         if(result.includes("Win")){
             score++
         }if(result.includes("Lose")){
