@@ -63,7 +63,7 @@ function playGame(rounds=5){
     )
     let i=0;
     let score=0;
-    //If one of the players win 3 games stop 
+    //If one of the players win 3 games stop the game and show the result 
     while(Math.abs(score) < rounds-i){
         result = playRound();
         if(result.includes("Win")){
