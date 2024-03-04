@@ -1,3 +1,5 @@
+//Computer move selection unaltered
+
 const moves = ["ROCK","PAPER","SCISSORS"]
 
 //Generate computer move at random
@@ -9,6 +11,17 @@ function getComputerMove(){
 function getRandInt(end,start=0){
     return start+Math.floor(Math.random()*(end-start));
 }
+
+//Show number of rounds
+const rounds = document.querySelector('#rounds');
+const round = document.querySelector('#round');
+round.textContent = '5';    //Default number of rounds
+
+rounds.addEventListener('input',() => rounds.value == ''? round.textContent = '5': round.textContent = rounds.value); //Change number of rounds
+
+const startBtn = document.querySelector('#start');
+
+
 
 //Prompt the user to chose a move
 function getPlayerMove(round){

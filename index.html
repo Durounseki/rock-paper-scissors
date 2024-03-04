@@ -10,7 +10,20 @@
 <body>
     <h1>Rock Paper Scissors</h1>
     <div class="ui">
-        <button class="start">START</button>
+        <div class="instructions">
+            <div class="instructions-text">
+                <h2>Let's Play Rock Paper Scissors!</h2>
+                <p>The Best Out of <span id="round"></span> Wins.</p>
+                <p>Are You Ready?</p>
+            </div>
+            <div class="set-up">
+                <div>
+                    <label for="rounds">Rounds:</label>
+                    <input type="text" name="rounds" id="rounds" maxlength="3">
+                </div>
+                <button id="start">START</button>
+            </div>
+        </div>
         <div class="scores">
             <div class="player-score">
                 <h1>Player</h1>

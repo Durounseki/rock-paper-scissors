@@ -8,12 +8,32 @@ body{
     justify-content: center;
 }
 
-.scores{
+.instructions{
     display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.set-up{
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+input#rounds[type="text"] {
+    width: 3ch;
+  }
+
+.scores{
+    display: none;
     justify-content: space-around;
 }
 
 .scores h1{
     font-size: 20px;
     font-weight: bold;
+}
+
+.controls{
+    display: none;
 }
