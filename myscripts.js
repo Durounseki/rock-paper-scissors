@@ -55,32 +55,29 @@ function startGame(){
 //Chose move
 
 const playerMoves = document.querySelectorAll('.controls button');
-let playerMove = '';
+const resultContainer = document.querySelector('.game-result');
+const result = document.querySelector('.game-result p');
 // const rock = document.querySelector('#rock');
 // const paper = document.querySelector('#paper');
 // const scissors = document.querySelector('#scissors');
 
 playerMoves.forEach( (button) => {
-    button.addEventListener('click', () => {playerMove = button.textContent;} );
+    button.addEventListener('click', () => {
+        result.textContent = playRound(button.textContent);
+        // console.log(button.textContent);
+    });
 });
 
 
 //Prompt the user to chose a move
-function getPlayerMove(round){
-    //Capitalize the string to make comparison easier 
-    let move=prompt(`Round ${round}: ROCK, PAPER, SCISSORS...`).toUpperCase();
-    //If the input is not in the allowed moves tell the user to chose again
-    while(!moves.includes(move)){
-        alert("Try again!")
-        move=prompt(`Round ${round}: ROCK, PAPER, SCISSORS...`).toUpperCase();
-    }
-    return move;
+function getPlayerMove(button){
+    return button.textContent;
 }
 
 //Play one round
-function playRound(round){
-    let playerMove=getPlayerMove(round);
+function playRound(playerMove){
     let computerMove=getComputerMove();
+    console.log(computerMove);
     if(playerMove==="ROCK"){
         if(computerMove==="PAPER"){
             return "You Lose! Paper beats Rock";
