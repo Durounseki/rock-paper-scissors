@@ -15,12 +15,54 @@ function getRandInt(end,start=0){
 //Show number of rounds
 const rounds = document.querySelector('#rounds');
 const round = document.querySelector('#round');
+const roundLabel = document.querySelector('label');
 round.textContent = '5';    //Default number of rounds
+let totalRounds = +round.textContent;
 
 rounds.addEventListener('input',() => rounds.value == ''? round.textContent = '5': round.textContent = rounds.value); //Change number of rounds
 
+//Start the game
+const instructions = document.querySelector('.instructions');
+const scores = document.querySelector('.scores')
+const playerScore = document.querySelector('.player-score p');
+playerScore.textContent = '0';
+const computerScore = document.querySelector('.computer-score p');
+computerScore.textContent = '0';
+const roundCount = document.querySelector('.round-count p');
+let currentRound = 1;
+roundCount.textContent = currentRound + "/" + totalRounds;
+const controls = document.querySelector('.controls');
 const startBtn = document.querySelector('#start');
 
+startBtn.addEventListener('click',startGame);
+
+function startGame(){
+    //Hide rounds input
+    roundLabel.style.display = 'none';
+    rounds.style.display = 'none';
+    //Show scores
+    scores.style.display = 'flex';
+    //Change text in start button
+    startBtn.textContent = 'RESTART';
+    //Show extra instructions
+    let instruction = document.createElement('p');
+    instruction.textContent = 'Make a move...'
+    instructions.appendChild(instruction);
+    //Show options
+    controls.style.display = 'flex';
+}
+
+//Chose move
+
+const playerMoves = document.querySelectorAll('.controls button');
+let playerMove = '';
+// const rock = document.querySelector('#rock');
+// const paper = document.querySelector('#paper');
+// const scissors = document.querySelector('#scissors');
+
+playerMoves.forEach( (button) => {
+    button.addEventListener('click', () => {playerMove = button.textContent;} );
+});
 
 
 //Prompt the user to chose a move

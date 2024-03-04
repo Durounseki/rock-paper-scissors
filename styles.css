@@ -36,4 +36,5 @@ input#rounds[type="text"] {
 
 .controls{
     display: none;
+    justify-content: space-around;
 }
