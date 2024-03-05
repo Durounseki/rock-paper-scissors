@@ -34,10 +34,6 @@ input#rounds[type="text"] {
     font-weight: bold;
 }
 
-/* .game-result{
-    display: none;
-} */
-
 .controls{
     display: none;
     justify-content: space-around;

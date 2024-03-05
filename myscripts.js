@@ -75,12 +75,6 @@ function startGame(){
     playerMoves.forEach( (button) => {button.removeEventListener('click', playGame);});
     playerMoves.forEach( (button) => {button.addEventListener('click', playGame);});
 
-    // // if(gameState.controlsEnable){
-    // //     playerMoves.forEach( (button) => {button.removeEventListener('click', playGame);});
-    // // }else{
-    // if(gameState.controlsEnable){
-        
-    // }
     //Show scores
     scores.style.display = 'flex';
     
