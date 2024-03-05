@@ -46,7 +46,9 @@ function playGame(event){
     if(gameState.controlsEnable){
         updateScore(event,gameState);
         endOfGameCondition(gameState);
-        gameState.currentRound++;
+        if(gameState.currentRound<gameState.totalRounds){
+            gameState.currentRound++;
+        }
         roundCount.textContent = gameState.currentRound + "/" + gameState.totalRounds;
     }
 }
@@ -143,7 +145,7 @@ function endOfGameCondition(gameState){
     console.log("remaining rounds "+remainingRounds);
     console.log("score "+score);
     //If one of the players win floor(n/2)+1 games stop the game and show the result 
-    if(Math.abs(score) > remainingRounds){
+    if(Math.abs(score) > remainingRounds || remainingRounds === 0){
         gameState.controlsEnable = false;
         console.log(gameState);
         if(score > 0){
