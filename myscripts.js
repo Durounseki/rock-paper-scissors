@@ -17,22 +17,27 @@ const rounds = document.querySelector('#rounds');
 const round = document.querySelector('#round');
 const roundLabel = document.querySelector('label');
 round.textContent = '5';    //Default number of rounds
-let totalRounds = +round.textContent;
-
 rounds.addEventListener('input',() => rounds.value == ''? round.textContent = '5': round.textContent = rounds.value); //Change number of rounds
 
 //Start the game
 const instructions = document.querySelector('.instructions');
 const scores = document.querySelector('.scores')
-const playerScore = document.querySelector('.player-score p');
-playerScore.textContent = '0';
-const computerScore = document.querySelector('.computer-score p');
-computerScore.textContent = '0';
+const playerScoreContainer = document.querySelector('.player-score p');
+const computerScoreContainer = document.querySelector('.computer-score p');
 const roundCount = document.querySelector('.round-count p');
-let currentRound = 1;
-roundCount.textContent = currentRound + "/" + totalRounds;
 const controls = document.querySelector('.controls');
 const startBtn = document.querySelector('#start');
+const playerMoves = document.querySelectorAll('.controls button');
+const resultContainer = document.querySelector('.game-result');
+const result = document.querySelector('.game-result p');
+
+//State of the game
+const gameState = {
+    playerScore: 0,
+    computerScore: 0,
+    currentRound: 1,
+    totalRounds: +round.textContent
+};
 
 startBtn.addEventListener('click',startGame);
 
@@ -50,29 +55,19 @@ function startGame(){
     instructions.appendChild(instruction);
     //Show options
     controls.style.display = 'flex';
+    //Start game
+    gameState.playerScore = 0;
+    playerScoreContainer.textContent = gameState.playerScore;
+    gameState.computerScore = 0;
+    computerScoreContainer.textContent = gameState.computerScore;
+    gameState.currentRound = 1;
+    roundCount.textContent = gameState.currentRound + "/" + gameState.totalRounds;
+    //Play one round on click button and update the score
+    playerMoves.forEach( (button) => {button.addEventListener('click', (event) => updateScore(event,gameState));});
+    //End game and disable controls
+    endOfGameCondition(gameState);
 }
 
-//Chose move
-
-const playerMoves = document.querySelectorAll('.controls button');
-const resultContainer = document.querySelector('.game-result');
-const result = document.querySelector('.game-result p');
-// const rock = document.querySelector('#rock');
-// const paper = document.querySelector('#paper');
-// const scissors = document.querySelector('#scissors');
-
-playerMoves.forEach( (button) => {
-    button.addEventListener('click', () => {
-        result.textContent = playRound(button.textContent);
-        // console.log(button.textContent);
-    });
-});
-
-
-//Prompt the user to chose a move
-function getPlayerMove(button){
-    return button.textContent;
-}
 
 //Play one round
 function playRound(playerMove){
@@ -105,32 +100,40 @@ function playRound(playerMove){
     }
 }
 
-//Play a game with n rounds, use default value n=5
-function playGame(rounds=5){
-    //Tell the user the game is about to start
-    alert(
-        `Let's Play Rock Paper Scissors!\n
-        The Best Out of ${rounds} Wins.\n
-        Are You Ready?`
-    )
-    let i=0;
-    let score=0;
-    //If one of the players win floor(n/2)+1 games stop the game and show the result 
-    while(Math.abs(score) <= rounds-i && rounds-i > 0){
-        result = playRound(i+1);
-        if(result.includes("Win")){
-            score++
-        }if(result.includes("Lose")){
-            score-- 
-        }
-        i++
-        alert(result);
+function updateScore(event,gameState){
+    button = event.target;
+    let roundResult = playRound(button.textContent);
+    result.textContent = roundResult;
+
+    if(roundResult.includes("Win")){
+        gameState.playerScore += 1;
+    }if(roundResult.includes("Lose")){
+        gameState.computerScore += 1
     }
-    if(score > 0){
-        return "Game Over. You Win!";
-    }if(score < 0){
-        return "Game Over. You Lose!";
-    }else{
-        return "Game Over. It's a Tie!"
+
+    playerScoreContainer.textContent = gameState.playerScore;
+    computerScoreContainer.textContent = gameState.computerScore;
+
+    gameState.currentRound++;
+    roundCount.textContent = gameState.currentRound + "/" + gameState.totalRounds;
+}
+
+function endOfGameCondition(gameState){
+    let score = gameState.playerScore - gameState.computerScore;
+    let remainingRounds = gameState.totalRounds-gameState.currentRound;
+    //If one of the players win floor(n/2)+1 games stop the game and show the result 
+    if(Math.abs(score) > remainingRounds){
+        playerMoves.forEach( (button) => {button.removeEventListener('click', updateScore);});
+        if(score > 0){
+            result.textContent = "Game Over. You Win!";
+        }if(score < 0){
+            result.textContent = "Game Over. You Lose!";
+        }else{
+            result.textContent = "Game Over. It's a Tie!"
+        }
     }
 }
+
+// function playGame(){
+//     updateScore();
+// }
