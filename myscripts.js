@@ -36,10 +36,20 @@ const gameState = {
     playerScore: 0,
     computerScore: 0,
     currentRound: 1,
-    totalRounds: +round.textContent
+    totalRounds: +round.textContent,
+    controlsEnable: false
 };
 
 startBtn.addEventListener('click',startGame);
+
+function playGame(event){
+    if(gameState.controlsEnable){
+        updateScore(event,gameState);
+        endOfGameCondition(gameState);
+        gameState.currentRound++;
+        roundCount.textContent = gameState.currentRound + "/" + gameState.totalRounds;
+    }
+}
 
 function startGame(){
     let instruction = document.querySelector('.instructions .game-instruction');
@@ -59,10 +69,16 @@ function startGame(){
     gameState.totalRounds = +round.textContent;
     roundCount.textContent = gameState.currentRound + "/" + gameState.totalRounds;
     result.textContent = '';
-    if(startBtn.textContent === 'START'){
-        //Enable controls, prevent adding extra event listeners when restarting the game
-        playerMoves.forEach( (button) => {button.addEventListener('click', (event) => playGame(event,gameState));});
-    }
+    gameState.controlsEnable = true;
+    playerMoves.forEach( (button) => {button.removeEventListener('click', playGame);});
+    playerMoves.forEach( (button) => {button.addEventListener('click', playGame);});
+
+    // // if(gameState.controlsEnable){
+    // //     playerMoves.forEach( (button) => {button.removeEventListener('click', playGame);});
+    // // }else{
+    // if(gameState.controlsEnable){
+        
+    // }
     //Show scores
     scores.style.display = 'flex';
     
@@ -118,19 +134,18 @@ function updateScore(event,gameState){
 
     playerScoreContainer.textContent = gameState.playerScore;
     computerScoreContainer.textContent = gameState.computerScore;
-
-    if(gameState.currentRound<gameState.totalRounds){
-        gameState.currentRound++;
-    }
-    roundCount.textContent = gameState.currentRound + "/" + gameState.totalRounds;
 }
 
 function endOfGameCondition(gameState){
     let score = gameState.playerScore - gameState.computerScore;
     let remainingRounds = gameState.totalRounds-gameState.currentRound;
+    console.log("current round "+gameState.currentRound);
+    console.log("remaining rounds "+remainingRounds);
+    console.log("score "+score);
     //If one of the players win floor(n/2)+1 games stop the game and show the result 
     if(Math.abs(score) > remainingRounds){
-        playerMoves.forEach( (button) => {button.removeEventListener('click', playGame);});
+        gameState.controlsEnable = false;
+        console.log(gameState);
         if(score > 0){
             result.textContent = "Game Over. You Win!";
         }if(score < 0){
@@ -140,9 +155,4 @@ function endOfGameCondition(gameState){
         }
         startBtn.textContent = 'START';
     }
-}
-
-function playGame(event,gameState){
-    updateScore(event,gameState);
-    endOfGameCondition(gameState);
 }
