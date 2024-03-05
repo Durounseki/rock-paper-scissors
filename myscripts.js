@@ -42,30 +42,35 @@ const gameState = {
 startBtn.addEventListener('click',startGame);
 
 function startGame(){
-    //Hide rounds input
-    roundLabel.style.display = 'none';
-    rounds.style.display = 'none';
-    //Show scores
-    scores.style.display = 'flex';
-    //Change text in start button
-    startBtn.textContent = 'RESTART';
-    //Show extra instructions
-    let instruction = document.createElement('p');
-    instruction.textContent = 'Make a move...'
-    instructions.appendChild(instruction);
-    //Show options
-    controls.style.display = 'flex';
-    //Start game
+    let instruction = document.querySelector('.instructions .game-instruction');
+    if(!instruction){
+        instruction = document.createElement('p');
+        instruction.classList.add('game-instruction');
+        instruction.textContent = 'Make a move...';
+        instructions.appendChild(instruction);
+    }
+
+    //Reset game state
     gameState.playerScore = 0;
     playerScoreContainer.textContent = gameState.playerScore;
     gameState.computerScore = 0;
     computerScoreContainer.textContent = gameState.computerScore;
     gameState.currentRound = 1;
+    gameState.totalRounds = +round.textContent;
     roundCount.textContent = gameState.currentRound + "/" + gameState.totalRounds;
-    //Play one round on click button and update the score
-    playerMoves.forEach( (button) => {button.addEventListener('click', (event) => updateScore(event,gameState));});
-    //End game and disable controls
-    endOfGameCondition(gameState);
+    result.textContent = '';
+    if(startBtn.textContent === 'START'){
+        //Enable controls, prevent adding extra event listeners when restarting the game
+        playerMoves.forEach( (button) => {button.addEventListener('click', (event) => playGame(event,gameState));});
+    }
+    //Show scores
+    scores.style.display = 'flex';
+    
+    //Change text in start button
+    startBtn.textContent = 'RESTART';
+    
+    //Show options
+    controls.style.display = 'flex';
 }
 
 
@@ -114,7 +119,9 @@ function updateScore(event,gameState){
     playerScoreContainer.textContent = gameState.playerScore;
     computerScoreContainer.textContent = gameState.computerScore;
 
-    gameState.currentRound++;
+    if(gameState.currentRound<gameState.totalRounds){
+        gameState.currentRound++;
+    }
     roundCount.textContent = gameState.currentRound + "/" + gameState.totalRounds;
 }
 
@@ -123,7 +130,7 @@ function endOfGameCondition(gameState){
     let remainingRounds = gameState.totalRounds-gameState.currentRound;
     //If one of the players win floor(n/2)+1 games stop the game and show the result 
     if(Math.abs(score) > remainingRounds){
-        playerMoves.forEach( (button) => {button.removeEventListener('click', updateScore);});
+        playerMoves.forEach( (button) => {button.removeEventListener('click', playGame);});
         if(score > 0){
             result.textContent = "Game Over. You Win!";
         }if(score < 0){
@@ -131,9 +138,11 @@ function endOfGameCondition(gameState){
         }else{
             result.textContent = "Game Over. It's a Tie!"
         }
+        startBtn.textContent = 'START';
     }
 }
 
-// function playGame(){
-//     updateScore();
-// }
+function playGame(event,gameState){
+    updateScore(event,gameState);
+    endOfGameCondition(gameState);
+}
